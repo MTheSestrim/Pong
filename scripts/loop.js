@@ -28,10 +28,10 @@ let loop = (() => {
     }
 
     function collides(p) {
-        if(ball.y + ball.r >= p.y && ball.y - ball.r <= p.y + p.height){
-            if(ball.x >= (p.x - p.width) && p.x > 0){
+        if (ball.y + ball.r >= p.y && ball.y - ball.r <= p.y + p.height) {
+            if (ball.x >= (p.x - p.width) && p.x > 0) {
                 return true;
-            } else if(ball.x <= p.width && p.x === 0){
+            } else if (ball.x <= p.width && p.x === 0) {
                 return true;
             }
         }
@@ -41,11 +41,12 @@ let loop = (() => {
     // Update
     function update() {
         // Move the paddles on mouse move
-        if(mouse.x && mouse.y){
-            for (let i = 0; i < paddles.length; i++) {
-                let p = paddles[i];
-                p.y = mouse.y - p.height/2;
-            }
+        if (mouse.x && mouse.y) {
+            paddles[0].y = mouse.y - paddles[1].height / 2;
+            // for (let i = 0; i < paddles.length; i++) {
+            //     let p = paddles[i];
+            //     p.y = mouse.y - p.height/2;
+            // }
         }
         // Move the ball
         ball.x += ball.vx;
@@ -54,21 +55,22 @@ let loop = (() => {
         //Collision with paddles
         let p1 = paddles[0];
         let p2 = paddles[1];
-        if(collides(p1)){
-            ball.vx = - ball.vx;
-        } else if(collides(p2)){
-            ball.vx = - ball.vx;
+        p2.followBall(ball);
+        if (collides(p1)) {
+            ball.vx = -ball.vx;
+        } else if (collides(p2)) {
+            ball.vx = -ball.vx;
         } else {
             // Collide with walls if the ball hits the top/bottom, run gameOver() function
-            if(ball.x + ball.r >= width){
-                ball.x  = width - ball.r;
+            if (ball.x + ball.r >= width) {
+                ball.x = width - ball.r;
                 gameOver();
-            } else if(ball.x <= 0){
+            } else if (ball.x <= 0) {
                 ball.x = ball.r;
                 gameOver();
             }
 
-            if(ball.y + ball.r >= height) {
+            if (ball.y + ball.r >= height) {
                 ball.vy = -ball.vy;
                 ball.y = height - ball.r;
             } else if (ball.y - ball.r <= 0) {
@@ -96,7 +98,7 @@ let loop = (() => {
         ctx.font = "20px Arial, sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText("Game Over", width/2, height/2 + 25);
+        ctx.fillText("Game Over", width / 2, height / 2 + 25);
 
         //Stop the animation
         cancelRequestAnimFrame(init);

@@ -12,7 +12,7 @@ $(() => {
             ctx.fill();
         }};
     paddles.push(new Paddle("right"));
-    paddles.push(new Paddle("left"));
+    paddles.push(new EnemyPaddle("left", 3.9));
     loop.defineContext(ctx);
     loop.defineBall(ball);
     loop.definePaddles(paddles);
