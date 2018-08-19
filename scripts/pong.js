@@ -5,7 +5,7 @@ $(() => {
     canvas.width = width;
     canvas.height = height;
     let particles = [], ball = {}, paddles = [];
-    ball = {x: width/2, y: height/2, r: 5, c: "white", vx: 4, vy: 1, draw: function () {
+    ball = {x: width/2, y: height/2, r: 5, c: "white", vx: 4, vy: 4, draw: function () {
             ctx.beginPath();
             ctx.fillStyle = this.c;
             ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);

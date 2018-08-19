@@ -30,8 +30,30 @@ let loop = (() => {
     function collides(p) {
         if (ball.y + ball.r >= p.y && ball.y - ball.r <= p.y + p.height) {
             if (ball.x >= (p.x - p.width) && p.x > 0) {
+                //These determine whether vx/vy is a positive or negative number
+                let vxConditional = ball.vx < 0;
+                let vyConditional = ball.vy < 0;
+                ball.vx = Math.abs(ball.vx) + 0.1;
+                ball.vy = Math.abs(ball.vy) + 0.1;
+                if(vxConditional){
+                    ball.vx *= - 1;
+                }
+                if(vyConditional){
+                    ball.vy *= - 1;
+                }
                 return true;
             } else if (ball.x <= p.width && p.x === 0) {
+                //These determine whether vx/vy is a positive or negative number
+                let vxConditional = ball.vx < 0;
+                let vyConditional = ball.vy < 0;
+                ball.vx = Math.abs(ball.vx) + 0.1;
+                ball.vy = Math.abs(ball.vy) + 0.1;
+                if(vxConditional){
+                    ball.vx *= - 1;
+                }
+                if(vyConditional){
+                    ball.vy *= - 1;
+                }
                 return true;
             }
         }
@@ -71,10 +93,10 @@ let loop = (() => {
             }
 
             if (ball.y + ball.r >= height) {
-                ball.vy = -ball.vy;
+                ball.vy = -(ball.vy + 0.1);
                 ball.y = height - ball.r;
             } else if (ball.y - ball.r <= 0) {
-                ball.vy = -ball.vy;
+                ball.vy = -(ball.vy - 0.1);
                 ball.y = ball.r;
             }
         }
