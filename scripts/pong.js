@@ -19,6 +19,13 @@ $(() => {
 
     // Construction logic
     loop.paintCanvas();
+    ctx.beginPath();
+    ctx.strokeStyle = "white";
+    ctx.rect(width / 4, height / 4, width / 2, height / 2);
+    ctx.stroke();
+    ctx.fillStyle = "white";
+    ctx.font = "80pt Arial";
+    ctx.fillText("Start Game", width / 3, height / 1.9);
     canvas.addEventListener("mousemove", trackPosition, true);
 
     function trackPosition(e) {
@@ -26,5 +33,10 @@ $(() => {
         mouse.y = e.pageY;
     }
     // Execution
-    loop.animLoop();
+
+    canvas.addEventListener("mouseup", () => {
+        if(mouse.x > width / 4 && mouse.x < width * 0.75 && mouse.y > height / 4 && mouse.y < height * 0.75){
+            loop.animLoop();
+        }
+    }, false);
 });
