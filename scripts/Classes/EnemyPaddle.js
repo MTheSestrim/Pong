@@ -9,9 +9,9 @@ class EnemyPaddle extends Paddle {
     }
 
     followBall(ball) {
-        if(ball.y  + ball.r >= this.y){
+        if(ball.y  + ball.r >= this.y + this.height / 2){
             this.moveDown();
-        } else if(ball.y  + ball.r <= this.y){
+        } else if(ball.y  + ball.r <= this.y + this.height / 2){
             this.moveUp();
         }
     }

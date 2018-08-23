@@ -4,13 +4,19 @@ $(() => {
     let ctx = canvas.getContext("2d");
     canvas.width = width;
     canvas.height = height;
-    let particles = [], ball = {}, paddles = [];
+    let ball = {}, paddles = [];
     ball = {x: width/2, y: height/2, r: 5, c: "white", vx: 4, vy: 4, draw: function () {
             ctx.beginPath();
             ctx.fillStyle = this.c;
             ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
             ctx.fill();
-        }};
+        },
+        spawnBall: function () {
+            ball.x = width / 2;
+            ball.y = height / 2;
+            ball.draw();
+        }
+    };
     paddles.push(new Paddle("right"));
     paddles.push(new EnemyPaddle("left", 4.5));
     loop.defineContext(ctx);
