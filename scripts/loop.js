@@ -2,7 +2,7 @@
 let loop = (() => {
     let ctx;
     let ball;
-    let paddles;
+    let paddles = [];
     let playerScore = 0;
     let opponentScore = 0;
 
@@ -17,6 +17,19 @@ let loop = (() => {
 
     function definePaddles(p) {
         paddles = p;
+    }
+    
+    function definePlayer(player) {
+        //Player paddle is 0, Enemy Paddle is 1
+        if(player){
+            paddles.length = 0;
+            paddles.push(new Paddle("left"));
+            paddles.push(new EnemyPaddle("right", 4.5));
+        } else {
+            paddles.length = 0;
+            paddles.push(new Paddle("right"));
+            paddles.push(new EnemyPaddle("left", 4.5));
+        }
     }
 
     function animLoop() {
@@ -54,13 +67,9 @@ let loop = (() => {
 
     // Update
     function update() {
-        // Move the paddles on mouse move
+        // Move the paddle on mouse move
         if (mouse.x && mouse.y) {
-            paddles[0].y = mouse.y - paddles[1].height / 2;
-            // for (let i = 0; i < paddles.length; i++) {
-            //     let p = paddles[i];
-            //     p.y = mouse.y - p.height/2;
-            // }
+            paddles[0].y = mouse.y - paddles[0].height / 2;
         }
         // Move the ball
         ball.x += ball.vx;
@@ -69,7 +78,7 @@ let loop = (() => {
         //Collision with paddles
         let p1 = paddles[0];
         let p2 = paddles[1];
-        p2.followBall(ball);
+        paddles[1].followBall(ball);
         if (collides(p1)) {
             ball.vx = -(ball.vx + 0.1);
         } else if (collides(p2)) {
@@ -111,5 +120,5 @@ let loop = (() => {
         ball.draw();
     }
 
-    return {defineContext, definePaddles, defineBall, animLoop, paintCanvas}
+    return {defineContext, definePaddles, defineBall, definePlayer, animLoop, paintCanvas}
 })();
