@@ -6,5 +6,7 @@ I'm making this game as an exercise for myself. I want to give thanks [here](htt
 This gave me a base for what I wanted to do. This game is more like the classic version of Pong.
 
 Language: JavaScript
-User jQuery.
+
+Uses jQuery.
+
 Made with Canvas
