@@ -5,6 +5,26 @@ let loop = (() => {
     let paddles = [];
     let playerScore = 0;
     let opponentScore = 0;
+    let loopRunning = false;
+    let gameStarted = false;
+
+    // Sets gameStarted to true so we know that the player has started the game
+    function setGameStart() {
+        gameStarted = true;
+    }
+
+    function gameIsStarted() {
+        return gameStarted;
+    }
+
+    //Lets us know the loop is running
+    function loopIsRunning() {
+        return loopRunning;
+    }
+
+    function setLoopState(state) {
+        loopRunning = state;
+    }
 
     //Defined here because the variables can't update fast enough/get lost in transition
     function defineContext(context) {
@@ -18,10 +38,10 @@ let loop = (() => {
     function definePaddles(p) {
         paddles = p;
     }
-    
+
     function definePlayer(player) {
         //Player paddle is 0, Enemy Paddle is 1
-        if(player){
+        if (player) {
             paddles.length = 0;
             paddles.push(new Paddle("left"));
             paddles.push(new EnemyPaddle("right", 4.5));
@@ -34,7 +54,8 @@ let loop = (() => {
 
     function animLoop() {
         init = requestAnimationFrame(animLoop);
-        draw(paddles);
+        loop.setLoopState(true);
+        draw();
     }
 
     function paintCanvas() {
@@ -48,16 +69,16 @@ let loop = (() => {
                 //These determine whether vx/vy is a positive or negative number
                 let vyConditional = ball.vy < 0;
                 ball.vy = Math.abs(ball.vy) + 0.1;
-                if(vyConditional){
-                    ball.vy *= - 1;
+                if (vyConditional) {
+                    ball.vy *= -1;
                 }
                 return true;
             } else if (ball.x <= p.width && p.x === 0) {
                 //These determine whether vx/vy is a positive or negative number
                 let vyConditional = ball.vy < 0;
                 ball.vy = Math.abs(ball.vy) + 0.1;
-                if(vyConditional){
-                    ball.vy *= - 1;
+                if (vyConditional) {
+                    ball.vy *= -1;
                 }
                 return true;
             }
@@ -116,9 +137,11 @@ let loop = (() => {
         }
         ctx.font = "40pt Arial";
         ctx.fillText(`${opponentScore} : ${playerScore}`, width / 2 - 60, 50);
+        ctx.fillRect(width / 2 + 90, 5, 10, 50);
+        ctx.fillRect(width / 2 + 110, 5, 10, 50);
         update();
         ball.draw();
     }
 
-    return {defineContext, definePaddles, defineBall, definePlayer, animLoop, paintCanvas}
+    return {gameIsStarted, setGameStart, setLoopState, loopIsRunning, defineContext, definePaddles, defineBall, definePlayer, animLoop, paintCanvas}
 })();

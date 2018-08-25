@@ -47,6 +47,7 @@ $(() => {
     loop.definePlayer(0);
     canvas.addEventListener("mouseup", () => {
         if(mouse.x > width / 4 && mouse.x < width * 0.75 && mouse.y > height / 4 && mouse.y < height * 0.75){
+            loop.setGameStart();
             loop.animLoop();
         }
         if(mouse.x > width / 4 && mouse.x < width / 4 + 50 && mouse.y > height / 16 - 15 && mouse.y < height / 16 + 35){
@@ -54,6 +55,31 @@ $(() => {
         }
         else if(mouse.x > width / 4 && mouse.x < width / 4  + 50 && mouse.y > height / 8 && mouse.y < height / 8 + 50){
             loop.definePlayer(1);
+        }
+
+        // Define mouseup events in-game (otherwise they work in menu)
+        if(loop.gameIsStarted()) {
+            if (mouse.x > width / 2 + 90 && mouse.x < width / 2 + 120 && mouse.y > 5 && mouse.y < 55) {
+                //Checks if loop is running and pauses, otherwise starts loop again
+                if (loop.loopIsRunning()) {
+                    cancelRequestAnimFrame(init);
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(width / 2 + 90, 5, 10, 50);
+                    ctx.fillRect(width / 2 + 110, 5, 10, 50);
+                    ctx.fillStyle = "white";
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2 + 120, 30);
+                    ctx.lineTo(width / 2 + 90, 5);
+                    ctx.lineTo(width / 2 + 90, 55);
+                    ctx.fill();
+                    loop.setLoopState(false);
+                } else {
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(width / 2 + 90, 5, 10, 50);
+                    ctx.fillRect(width / 2 + 110, 5, 10, 50);
+                    loop.animLoop();
+                }
+            }
         }
     }, false);
 });
