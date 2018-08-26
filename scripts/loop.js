@@ -52,7 +52,7 @@ let loop = (() => {
             }
         }
 
-        function restartGame() {
+        function restartGame(exit) {
             // Cancels animation so changes can be made
             cancelRequestAnimFrame(init);
 
@@ -76,8 +76,10 @@ let loop = (() => {
             paddles[0].y = height/2 - paddles[0].height/2;
             paddles[1].y = height/2 - paddles[1].height/2;
 
-            // Starts loop again
-            animLoop();
+            if(!exit) {
+                // Starts loop again if restart button is pressed
+                animLoop();
+            }
         }
 
         function animLoop() {
@@ -168,6 +170,7 @@ let loop = (() => {
             ctx.fillRect(width / 2 + 90, 5, 10, 50);
             ctx.fillRect(width / 2 + 110, 5, 10, 50);
             ctx.fillText("\u21BB", width / 2 + 150, 50);
+            ctx.fillText("\u2715", width / 2 + 220, 50);
             update();
             ball.draw();
         }

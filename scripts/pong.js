@@ -23,20 +23,7 @@ $(() => {
     loop.defineBall(ball);
     loop.definePaddles(paddles);
 
-    // Construction logic
-    loop.paintCanvas();
-    ctx.beginPath();
-    ctx.strokeStyle = "white";
-    ctx.fillStyle = "white";
-    ctx.font = "40pt Arial";
-    ctx.fillRect(width / 4, height / 16 - 15, 50, 50);
-    ctx.fillText("Player 1 (Right)", width / 3 - 20, height / 11);
-    ctx.rect(width / 4, height / 8, 50, 50);
-    ctx.fillText("Player 2 (Left)", width / 3 - 20, height / 6);
-    ctx.rect(width / 4, height / 4, width / 2, height / 2);
-    ctx.stroke();
-    ctx.font = "80pt Arial";
-    ctx.fillText("Start Game", width / 3, height / 1.9);
+    constructStartMenu();
     canvas.addEventListener("mousemove", trackPosition, true);
 
     function trackPosition(e) {
@@ -83,6 +70,30 @@ $(() => {
             if(mouse.x > width / 2 + 150 && mouse.x < width / 2 + 190 && mouse.y > 20 && mouse.y < 50){
                 loop.restartGame();
             }
+
+            if(mouse.x > width / 2 + 220 && mouse.x < width / 2 + 260 && mouse.y > 10 && mouse.y < 50){
+                cancelAnimationFrame(init);
+                loop.restartGame(true);
+                constructStartMenu();
+            }
         }
     }, false);
+
+
+    function constructStartMenu() {
+        // Construction logic
+        loop.paintCanvas();
+        ctx.beginPath();
+        ctx.strokeStyle = "white";
+        ctx.fillStyle = "white";
+        ctx.font = "40pt Arial";
+        ctx.fillRect(width / 4, height / 16 - 15, 50, 50);
+        ctx.fillText("Player 1 (Right)", width / 3 - 20, height / 11);
+        ctx.rect(width / 4, height / 8, 50, 50);
+        ctx.fillText("Player 2 (Left)", width / 3 - 20, height / 6);
+        ctx.rect(width / 4, height / 4, width / 2, height / 2);
+        ctx.stroke();
+        ctx.font = "80pt Arial";
+        ctx.fillText("Start Game", width / 3, height / 1.9);
+    }
 });
