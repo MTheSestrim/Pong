@@ -80,6 +80,9 @@ $(() => {
                     loop.animLoop();
                 }
             }
+            if(mouse.x > width / 2 + 150 && mouse.x < width / 2 + 190 && mouse.y > 20 && mouse.y < 50){
+                loop.restartGame();
+            }
         }
     }, false);
 });
