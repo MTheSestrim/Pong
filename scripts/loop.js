@@ -5,6 +5,7 @@ let loop = (() => {
         let paddles = [];
         let playerScore = 0;
         let opponentScore = 0;
+        let particles = [];
         let loopRunning = false;
         let gameStarted = false;
 
@@ -79,6 +80,8 @@ let loop = (() => {
             if(!exit) {
                 // Starts loop again if restart button is pressed
                 animLoop();
+            } else {
+                gameStarted = false;
             }
         }
 
@@ -132,8 +135,16 @@ let loop = (() => {
             paddles[1].followBall(ball);
             if (collides(p1)) {
                 ball.vx = -(ball.vx + 0.1);
+                // Pushes particles in array
+                for (let i = 0; i < 20; i++) {
+                    particles.push(new Particle(ball.x - ball.r, ball.y, -1));
+                }
             } else if (collides(p2)) {
                 ball.vx = -(ball.vx - 0.1);
+                for (let i = 0; i < 20; i++) {
+                    // Pushes particles in array
+                    particles.push(new Particle(ball.x + ball.r, ball.y, 1));
+                }
             } else {
                 // Collide with walls if the ball hits the top/bottom, respawn ball
                 if (ball.x + ball.r >= width) {
@@ -154,6 +165,8 @@ let loop = (() => {
                     ball.y = ball.r;
                 }
             }
+
+            emitParticles();
         }
 
         //Draw
@@ -173,6 +186,29 @@ let loop = (() => {
             ctx.fillText("\u2715", width / 2 + 220, 50);
             update();
             ball.draw();
+        }
+        
+        function emitParticles() {
+            // Animates each particle
+            for (let i = 0; i < particles.length; i++) {
+                let par = particles[i];
+
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                // Doesn't animate particles which have died
+                if(par.radius > 0) {
+                    ctx.arc(par.x, par.y, par.radius, 0, Math.PI * 2, false);
+                }
+                ctx.fill();
+
+                par.x += par.vx;
+                par.y += par.vy;
+
+                // Reduce radius so that the particles die after a few seconds
+                par.radius = Math.max(par.radius - 0.05, 0.0);
+            }
+            //Doesn't keep any useless particles
+            particles = particles.filter(p => p.radius > 0);
         }
 
         return {

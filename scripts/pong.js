@@ -33,17 +33,6 @@ $(() => {
     // Execution
     loop.definePlayer(0);
     canvas.addEventListener("mouseup", () => {
-        if(mouse.x > width / 4 && mouse.x < width * 0.75 && mouse.y > height / 4 && mouse.y < height * 0.75){
-            loop.setGameStart();
-            loop.animLoop();
-        }
-        if(mouse.x > width / 4 && mouse.x < width / 4 + 50 && mouse.y > height / 16 - 15 && mouse.y < height / 16 + 35){
-            loop.definePlayer(0);
-        }
-        else if(mouse.x > width / 4 && mouse.x < width / 4  + 50 && mouse.y > height / 8 && mouse.y < height / 8 + 50){
-            loop.definePlayer(1);
-        }
-
         // Define mouseup events in-game (otherwise they work in menu)
         if(loop.gameIsStarted()) {
             if (mouse.x > width / 2 + 90 && mouse.x < width / 2 + 120 && mouse.y > 5 && mouse.y < 55) {
@@ -75,6 +64,33 @@ $(() => {
                 cancelAnimationFrame(init);
                 loop.restartGame(true);
                 constructStartMenu();
+            }
+        } else {
+            if(mouse.x > width / 4 && mouse.x < width * 0.75 && mouse.y > height / 4 && mouse.y < height * 0.75){
+                loop.setGameStart();
+                loop.animLoop();
+            }
+            if(mouse.x > width / 4 && mouse.x < width / 4 + 50 && mouse.y > height / 16 - 15 && mouse.y < height / 16 + 35){
+                loop.definePlayer(0);
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.fillRect(width / 4, height / 16 - 15, 50, 50);
+                ctx.fillStyle = "black";
+                ctx.fillRect(width / 4, height / 8, 50, 50);
+                ctx.fillStyle = "white";
+                ctx.rect(width / 4, height / 8, 50, 50);
+                ctx.stroke();
+            }
+            else if(mouse.x > width / 4 && mouse.x < width / 4  + 50 && mouse.y > height / 8 && mouse.y < height / 8 + 50){
+                loop.definePlayer(1);
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.fillRect(width / 4, height / 8, 50, 50);
+                ctx.fillStyle = "black";
+                ctx.fillRect(width / 4, height / 16 - 15, 50, 50);
+                ctx.fillStyle = "white";
+                ctx.rect(width / 4, height / 16 - 15, 50, 50);
+                ctx.stroke();
             }
         }
     }, false);
