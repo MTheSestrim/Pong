@@ -160,12 +160,12 @@ let loop = (() => {
                     particles.push(new Particle(ball.x - ball.r, ball.y, -1));
                 }
             } else if (collides(p2)) {
+                increaseBallVelocity();
                 for (let i = 0; i < 20; i++) {
                     // Pushes particles in array
                     particles.push(new Particle(ball.x + ball.r, ball.y, 1));
                 }
             } else {
-                increaseBallVelocity();
                 // Collide with walls if the ball hits the top/bottom, respawn ball
                 if (ball.x + ball.r >= width) {
                     ball.x = width - ball.r;
