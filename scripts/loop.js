@@ -8,6 +8,7 @@ let loop = (() => {
         let particles = [];
         let loopRunning = false;
         let gameStarted = false;
+        let difficulty = "normal";
 
         // Sets gameStarted to true so we know that the player has started the game
         function setGameStart() {
@@ -27,6 +28,12 @@ let loop = (() => {
             loopRunning = state;
         }
 
+        function setDifficulty(diff) {
+            difficulty = diff;
+            // Sets difficulty for enemy paddle so AI can adapt
+            paddles[1].difficulty = diff;
+        }
+
         //Defined here because the variables can't update fast enough/get lost in transition
         function defineContext(context) {
             ctx = context;
@@ -36,20 +43,16 @@ let loop = (() => {
             ball = b;
         }
 
-        function definePaddles(p) {
-            paddles = p;
-        }
-
         function definePlayer(player) {
             //Player paddle is 0, Enemy Paddle is 1
             if (player) {
                 paddles.length = 0;
                 paddles.push(new Paddle("left"));
-                paddles.push(new EnemyPaddle("right", 4.5));
+                paddles.push(new EnemyPaddle("right",difficulty));
             } else {
                 paddles.length = 0;
                 paddles.push(new Paddle("right"));
-                paddles.push(new EnemyPaddle("left", 4.5));
+                paddles.push(new EnemyPaddle("left", difficulty));
             }
         }
 
@@ -67,18 +70,21 @@ let loop = (() => {
                     ctx.fill();
                 },
                 spawnBall: function () {
-                    ball.x = width / 2;
-                    ball.y = height / 2;
-                    ball.vx = 2;
-                    ball.vy = 2;
-                    ball.draw();
+                    this.x = width / 2;
+                    this.y = height / 2;
+                    this.vx = 2;
+                    this.vy = 2;
+                    this.draw();
                 }
             };
             paddles[0].y = height/2 - paddles[0].height/2;
             paddles[1].y = height/2 - paddles[1].height/2;
+            opponentScore = 0;
+            playerScore = 0;
 
             if(!exit) {
                 // Starts loop again if restart button is pressed
+                ball.spawnBall();
                 animLoop();
             } else {
                 gameStarted = false;
@@ -132,20 +138,34 @@ let loop = (() => {
             //Collision with paddles
             let p1 = paddles[0];
             let p2 = paddles[1];
-            paddles[1].followBall(ball);
+            //Create invisible ball for AI to follow. Its position is slightly modified so as to make it act more human.
+            let invisibleBall = $.extend({}, ball);
+            switch (difficulty){
+                case "easy":
+                    invisibleBall.y += 1.5;
+                    break;
+                case "normal":
+                    invisibleBall.y += 1;
+                    break;
+                case "hard":
+                    invisibleBall.y += 0.3;
+                    break;
+            }
+            paddles[1].followBall(invisibleBall);
+
             if (collides(p1)) {
-                ball.vx = -(ball.vx + 0.1);
+                increaseBallVelocity();
                 // Pushes particles in array
                 for (let i = 0; i < 20; i++) {
                     particles.push(new Particle(ball.x - ball.r, ball.y, -1));
                 }
             } else if (collides(p2)) {
-                ball.vx = -(ball.vx - 0.1);
                 for (let i = 0; i < 20; i++) {
                     // Pushes particles in array
                     particles.push(new Particle(ball.x + ball.r, ball.y, 1));
                 }
             } else {
+                increaseBallVelocity();
                 // Collide with walls if the ball hits the top/bottom, respawn ball
                 if (ball.x + ball.r >= width) {
                     ball.x = width - ball.r;
@@ -211,8 +231,17 @@ let loop = (() => {
             particles = particles.filter(p => p.radius > 0);
         }
 
+        function increaseBallVelocity() {
+            //Increases velocity and changes speed accordingly on paddle hit
+            if(ball.vx < 0){
+                ball.vx = -(ball.vx - 0.2);
+            } else {
+                ball.vx = -(ball.vx + 0.2);
+            }
+        }
+
         return {
-            gameIsStarted, setGameStart, setLoopState, loopIsRunning, defineContext, definePaddles, defineBall,
+            gameIsStarted, setGameStart, setLoopState, setDifficulty, loopIsRunning, defineContext, defineBall,
             definePlayer, restartGame, animLoop, paintCanvas
         }
     }
