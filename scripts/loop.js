@@ -9,6 +9,7 @@ let loop = (() => {
         let loopRunning = false;
         let gameStarted = false;
         let difficulty = "normal";
+        let currentPlayer = 0;
 
         // Sets gameStarted to true so we know that the player has started the game
         function setGameStart() {
@@ -34,6 +35,10 @@ let loop = (() => {
             paddles[1].difficulty = diff;
         }
 
+        function getCurrentPlayer() {
+            return currentPlayer;
+        }
+
         //Defined here because the variables can't update fast enough/get lost in transition
         function defineContext(context) {
             ctx = context;
@@ -44,6 +49,7 @@ let loop = (() => {
         }
 
         function definePlayer(player) {
+            currentPlayer = player;
             //Player paddle is 0, Enemy Paddle is 1
             if (player) {
                 paddles.length = 0;
@@ -63,7 +69,7 @@ let loop = (() => {
             // Sets everything to base state
             ctx.clearRect(0, 0, width, height);
             ball = {
-                x: width / 2, y: height / 2, r: 5, c: "white", vx: 2, vy: 2, draw: function () {
+                x: width / 2, y: height / 2, r: 5, c: "white", vx: 6, vy: 2, draw: function () {
                     ctx.beginPath();
                     ctx.fillStyle = this.c;
                     ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
@@ -72,7 +78,7 @@ let loop = (() => {
                 spawnBall: function () {
                     this.x = width / 2;
                     this.y = height / 2;
-                    this.vx = 2;
+                    this.vx = 6;
                     this.vy = 2;
                     this.draw();
                 }
@@ -234,15 +240,15 @@ let loop = (() => {
         function increaseBallVelocity() {
             //Increases velocity and changes speed accordingly on paddle hit
             if(ball.vx < 0){
-                ball.vx = -(ball.vx - 0.2);
+                ball.vx = -(ball.vx - 0.5);
             } else {
-                ball.vx = -(ball.vx + 0.2);
+                ball.vx = -(ball.vx + 0.5);
             }
         }
 
         return {
-            gameIsStarted, setGameStart, setLoopState, setDifficulty, loopIsRunning, defineContext, defineBall,
-            definePlayer, restartGame, animLoop, paintCanvas
+            gameIsStarted, getCurrentPlayer, setGameStart, setLoopState, setDifficulty, loopIsRunning, defineContext,
+            defineBall, definePlayer, restartGame, animLoop, paintCanvas
         }
     }
 

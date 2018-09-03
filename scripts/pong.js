@@ -6,7 +6,7 @@ $(() => {
     canvas.height = height;
     let ball = {};
     ball = {
-        x: width / 2, y: height / 2, r: 5, c: "white", vx: 2, vy: 2, draw: function () {
+        x: width / 2, y: height / 2, r: 5, c: "white", vx: 6, vy: 2, draw: function () {
             ctx.beginPath();
             ctx.fillStyle = this.c;
             ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
@@ -22,6 +22,7 @@ $(() => {
     };
     loop.defineContext(ctx);
     loop.defineBall(ball);
+    loop.definePlayer(0);
 
     constructStartMenu();
     canvas.addEventListener("mousemove", trackPosition, true);
@@ -32,7 +33,6 @@ $(() => {
     }
 
     // Execution
-    loop.definePlayer(0);
     canvas.addEventListener("mouseup", () => {
         // Define mouseup events in-game (otherwise they work in menu)
         if (loop.gameIsStarted()) {
@@ -164,10 +164,16 @@ $(() => {
         ctx.strokeStyle = "white";
         ctx.fillStyle = "white";
         ctx.font = "40pt Arial";
-        ctx.fillRect(width / 4, height / 16 - 15, 50, 50);
         ctx.fillText("Player 1 (Right)", width / 3 - 20, height / 11);
-        ctx.rect(width / 4, height / 8, 50, 50);
         ctx.fillText("Player 2 (Left)", width / 3 - 20, height / 6);
+        //Sets current player for when the player exits to the start menu
+        if(loop.getCurrentPlayer() === 0) {
+            ctx.fillRect(width / 4, height / 16 - 15, 50, 50);
+            ctx.rect(width / 4, height / 8, 50, 50);
+        } else {
+            ctx.rect(width / 4, height / 16 - 15, 50, 50);
+            ctx.fillRect(width / 4, height / 8, 50, 50);
+        }
         ctx.rect(width / 4, height / 4, width / 2, height / 2);
         ctx.stroke();
         ctx.font = "80pt Arial";
